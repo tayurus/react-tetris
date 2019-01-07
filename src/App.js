@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
-
 import _ from "lodash";
-import { generateNewField, drawFigure, rotateFigure } from "./helpers";
+import { generateNewField, drawFigure, rotateFigure, moveFigure } from "./helpers";
 import { Field } from "./components";
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -11,8 +11,7 @@ class App extends Component {
       field: [],
       figure: {
         points: []
-      },
-      figureUpdated: false
+      }
     };
 
     this.updateFigureOnField = this.updateFigureOnField.bind(this);
@@ -23,15 +22,25 @@ class App extends Component {
       {
         field: generateNewField()
       },
-      () =>
-        this.setState({ figure: drawFigure("line", 0, 4) }, () => {
-          this.updateFigureOnField();
-          setTimeout(
-            () => this.setState({ figure: rotateFigure(this.state.figure) }, () => this.updateFigureOnField()),
-            1000
-          );
-        })
+      () => this.setState({ figure: drawFigure("line", 0, 4) })
     );
+
+    document.onkeydown = e => {
+      switch (e.which) {
+        case 37: // left
+          this.setState({ figure: moveFigure(this.state.figure, "left") }, () => this.updateFigureOnField());
+          break;
+        case 38: // up
+          this.setState({ figure: rotateFigure(this.state.figure) }, () => this.updateFigureOnField());
+          break;
+        case 39: // right
+          this.setState({ figure: moveFigure(this.state.figure, "right") }, () => this.updateFigureOnField());
+          break;
+        case 40: // right
+          this.setState({ figure: moveFigure(this.state.figure, "down") }, () => this.updateFigureOnField());
+          break;
+      }
+    };
   }
 
   updateFigureOnField() {
@@ -44,7 +53,6 @@ class App extends Component {
   }
 
   render() {
-    // console.log(this.state);
     return (
       <div className="App">
         <Field className="mx-auto" field={this.state.field} />
