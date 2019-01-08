@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import _ from "lodash";
-import { generateNewField, drawFigure, rotateFigure, moveFigure, moveCell } from "./helpers";
+import { generateNewField, drawFigure, rotateFigure, moveFigure, moveCell, generateFigureType } from "./helpers";
 import { FIELD_HEIGHT, FIELD_WIDTH } from "./constants";
 import { Field } from "./components";
 
@@ -80,7 +80,7 @@ class App extends Component {
   }
 
   drawNewFigure() {
-    this.setState({ figure: drawFigure("line", 0, 4) });
+    this.setState({ figure: drawFigure("hook", 0, 4) });
   }
 
   removeFullRows() {
