@@ -22,7 +22,10 @@ class App extends Component {
       {
         field: generateNewField()
       },
-      () => this.drawNewFigure()
+      () => {
+        this.drawNewFigure();
+        setInterval(() => this.tetrisMove("down"), 1000);
+      }
     );
 
     document.onkeydown = e => {
@@ -44,17 +47,21 @@ class App extends Component {
           break;
       }
 
-      const oldFigure = _.clone(this.state.figure);
-      const newFigure = moveFigure(this.state.field, this.state.figure, direction);
-      if (_.isEqual(oldFigure, newFigure) && direction === "down") {
-        this.fixFigure();
-        this.drawNewFigure();
-      } else {
-        this.setState({ figure: moveFigure(this.state.field, this.state.figure, direction) }, () =>
-          this.updateFigureOnField()
-        );
-      }
+      this.tetrisMove(direction);
     };
+  }
+
+  tetrisMove(direction) {
+    const oldFigure = _.clone(this.state.figure);
+    const newFigure = moveFigure(this.state.field, this.state.figure, direction);
+    if (_.isEqual(oldFigure, newFigure) && direction === "down") {
+      this.fixFigure();
+      this.drawNewFigure();
+    } else {
+      this.setState({ figure: moveFigure(this.state.field, this.state.figure, direction) }, () =>
+        this.updateFigureOnField()
+      );
+    }
   }
 
   updateFigureOnField() {
