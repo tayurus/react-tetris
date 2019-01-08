@@ -32,7 +32,9 @@ class App extends Component {
           direction = "left";
           break;
         case 38: // up
-          this.setState({ figure: rotateFigure(this.state.figure) }, () => this.updateFigureOnField());
+          this.setState({ figure: rotateFigure(this.state.field, this.state.figure) }, () =>
+            this.updateFigureOnField()
+          );
           break;
         case 39: // right
           direction = "right";
