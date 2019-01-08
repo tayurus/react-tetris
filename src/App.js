@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./App.css";
 import _ from "lodash";
 import { generateNewField, drawFigure, rotateFigure, moveFigure, moveCell, generateFigureType } from "./helpers";
-import { FIELD_HEIGHT, FIELD_WIDTH } from "./constants";
+import { FIELD_HEIGHT, FIELD_WIDTH, SPAWN_ROW, SPAWN_COL } from "./constants";
 import { Field, ScoreBoard } from "./components";
 
 class App extends Component {
@@ -81,7 +81,12 @@ class App extends Component {
   }
 
   drawNewFigure() {
-    this.setState({ figure: drawFigure(generateFigureType(), 0, 4) });
+    const newFigure = drawFigure(generateFigureType(), SPAWN_ROW, SPAWN_COL);
+    if (this.state.field[SPAWN_ROW + newFigure.height][SPAWN_COL + newFigure.width] !== 0) {
+      alert("GAME OVER");
+    } else {
+      this.setState({ figure: newFigure });
+    }
   }
 
   removeFullRows() {
