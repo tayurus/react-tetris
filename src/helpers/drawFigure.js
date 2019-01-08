@@ -3,7 +3,7 @@ export const drawFigure = (figureName = "line", row = 0, col = 0) => {
     case "line":
       return {
         name: "line",
-        points: [[row, col], [row + 1, col], [row + 2, col]],
+        points: [[row, col], [row + 1, col], [row + 2, col], [row + 3, col]],
         rotate: 0
       };
   }
