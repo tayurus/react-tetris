@@ -4,6 +4,10 @@
   border: 1px solid #ccc;
 }
 
-.Field__cell_fill {
+.Field__cell_figure {
   background: tomato;
+}
+
+.Field__cell_fixed {
+  background: limegreen;
 }

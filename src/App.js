@@ -22,7 +22,7 @@ class App extends Component {
       {
         field: generateNewField()
       },
-      () => this.setState({ figure: drawFigure("line", 0, 4) })
+      () => this.drawNewFigure()
     );
 
     document.onkeydown = e => {
@@ -43,9 +43,17 @@ class App extends Component {
           direction = "down";
           break;
       }
-      this.setState({ figure: moveFigure(this.state.field, this.state.figure, direction) }, () =>
-        this.updateFigureOnField()
-      );
+
+      const oldFigure = _.clone(this.state.figure);
+      const newFigure = moveFigure(this.state.field, this.state.figure, direction);
+      if (_.isEqual(oldFigure, newFigure) && direction === "down") {
+        this.fixFigure();
+        this.drawNewFigure();
+      } else {
+        this.setState({ figure: moveFigure(this.state.field, this.state.figure, direction) }, () =>
+          this.updateFigureOnField()
+        );
+      }
     };
   }
 
@@ -56,6 +64,16 @@ class App extends Component {
     //draw
     this.state.figure.points.forEach(point => (newField[point[0]][point[1]] = 1));
     this.setState({ field: newField });
+  }
+
+  fixFigure() {
+    let newField = _.clone(this.state.field);
+    newField = newField.map(row => row.map(col => (col === 1 ? 2 : col)));
+    this.setState({ field: newField });
+  }
+
+  drawNewFigure() {
+    this.setState({ figure: drawFigure("line", 0, 4) });
   }
 
   render() {

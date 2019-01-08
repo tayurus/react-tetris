@@ -11,7 +11,10 @@ export const Field = props => {
           return (
             <tr key={rowindex}>
               {row.map((col, colIndex) => (
-                <td key={colIndex} className={"Field__cell " + (col === 1 ? "Field__cell_fill" : "")} />
+                <td
+                  key={colIndex}
+                  className={"Field__cell " + (col === 1 ? "Field__cell_figure" : col === 2 ? "Field__cell_fixed" : "")}
+                />
               ))}
             </tr>
           );
