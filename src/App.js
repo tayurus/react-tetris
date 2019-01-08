@@ -80,7 +80,7 @@ class App extends Component {
   }
 
   drawNewFigure() {
-    this.setState({ figure: drawFigure("hook", 0, 4) });
+    this.setState({ figure: drawFigure(generateFigureType(), 0, 4) });
   }
 
   removeFullRows() {
@@ -98,11 +98,11 @@ class App extends Component {
     });
 
     //drop other fixed cells on empty space
-    for (let row = FIELD_HEIGHT - 2; row >= 0; row--) {
-      for (let col = 0; col < FIELD_WIDTH; col++) {
-        if (newField[row + 1][col] === 0 && newField[row][col] === 2) {
-          newField[row + 1][col] = 2;
-          newField[row][col] = 0;
+    for (let i = 0; i < rowRemovedCount; i++) {
+      for (let row = FIELD_HEIGHT - 2; row >= 0; row--) {
+        if (newField[row + 1].every(item => item === 0)) {
+          newField[row + 1] = _.clone(newField[row]);
+          newField[row] = newField[row].map(item => (item = 0));
         }
       }
     }
