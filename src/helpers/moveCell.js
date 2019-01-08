@@ -7,7 +7,7 @@ export const moveCell = (field, point, rowDelta, colDelta) => {
   if (rowCollisionWidthField || colCollisionWithField) {
     return false;
   } else {
-    const collisionWithOtherFigures = field[point[0] + rowDelta][point[1] + colDelta] == 2;
+    const collisionWithOtherFigures = field[point[0] + rowDelta][point[1] + colDelta] === 2;
     if (collisionWithOtherFigures) {
       return false;
     }

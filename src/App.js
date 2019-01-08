@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
 import _ from "lodash";
-import { generateNewField, drawFigure, rotateFigure, moveFigure } from "./helpers";
+import { generateNewField, drawFigure, rotateFigure, moveFigure, moveCell } from "./helpers";
+import { FIELD_HEIGHT, FIELD_WIDTH } from "./constants";
 import { Field } from "./components";
 
 class App extends Component {
@@ -13,8 +14,6 @@ class App extends Component {
         points: []
       }
     };
-
-    this.updateFigureOnField = this.updateFigureOnField.bind(this);
   }
 
   componentDidMount() {
@@ -56,6 +55,7 @@ class App extends Component {
     const newFigure = moveFigure(this.state.field, this.state.figure, direction);
     if (_.isEqual(oldFigure, newFigure) && direction === "down") {
       this.fixFigure();
+      this.removeFullRows();
       this.drawNewFigure();
     } else {
       this.setState({ figure: moveFigure(this.state.field, this.state.figure, direction) }, () =>
@@ -83,10 +83,37 @@ class App extends Component {
     this.setState({ figure: drawFigure("line", 0, 4) });
   }
 
+  removeFullRows() {
+    let newField = _.clone(this.state.field);
+    let rowRemovedCount = 0;
+
+    //remove rows
+    newField = newField.map(row => {
+      if (row.every(item => item === 2)) {
+        rowRemovedCount++;
+        return row.map(item => 0);
+      } else {
+        return row;
+      }
+    });
+
+    //drop other fixed cells on empty space
+    for (let row = FIELD_HEIGHT - 2; row >= 0; row--) {
+      for (let col = 0; col < FIELD_WIDTH; col++) {
+        if (newField[row + 1][col] === 0 && newField[row][col] === 2) {
+          newField[row + 1][col] = 2;
+          newField[row][col] = 0;
+        }
+      }
+    }
+
+    this.setState({ field: newField });
+  }
+
   render() {
     return (
       <div className="App">
-        <Field className="mx-auto" field={this.state.field} />
+        <Field className="mx-auto my-5" field={this.state.field} />
       </div>
     );
   }

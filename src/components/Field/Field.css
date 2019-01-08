@@ -1,3 +1,7 @@
+.Field {
+  border: 1px solid #ccc;
+}
+
 .Field__cell {
   width: 30px;
   height: 30px;
