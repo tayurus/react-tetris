@@ -26,20 +26,24 @@ class App extends Component {
     );
 
     document.onkeydown = e => {
+      let direction = "bottom";
       switch (e.which) {
         case 37: // left
-          this.setState({ figure: moveFigure(this.state.figure, "left") }, () => this.updateFigureOnField());
+          direction = "left";
           break;
         case 38: // up
           this.setState({ figure: rotateFigure(this.state.figure) }, () => this.updateFigureOnField());
           break;
         case 39: // right
-          this.setState({ figure: moveFigure(this.state.figure, "right") }, () => this.updateFigureOnField());
+          direction = "right";
           break;
-        case 40: // right
-          this.setState({ figure: moveFigure(this.state.figure, "down") }, () => this.updateFigureOnField());
+        case 40: // down
+          direction = "down";
           break;
       }
+      this.setState({ figure: moveFigure(this.state.field, this.state.figure, direction) }, () =>
+        this.updateFigureOnField()
+      );
     };
   }
 
