@@ -12,7 +12,8 @@ class App extends Component {
       field: [],
       figure: {
         points: []
-      }
+    },
+    toggleMove: true
     };
   }
 
@@ -23,7 +24,7 @@ class App extends Component {
       },
       () => {
         this.drawNewFigure();
-        setInterval(() => this.tetrisMove("down"), 1000);
+        this.startInterval()
       }
     );
 
@@ -62,6 +63,16 @@ class App extends Component {
         this.updateFigureOnField()
       );
     }
+  }
+
+  startInterval = () => {
+      this.moveInterval = setInterval(() => this.tetrisMove("down"), 1000)
+  }
+
+  toggleMove = () => {
+      this.setState((state) => ({
+        toggleMove: !state.toggleMove
+    }), () => this.state.toggleMove ? this.startInterval() : clearInterval(this.moveInterval))
   }
 
   updateFigureOnField() {
@@ -111,8 +122,10 @@ class App extends Component {
   }
 
   render() {
+    const text = this.state.toggleMove ? 'Pause' : 'Start'
     return (
       <div className="App">
+        <button type="button" className="btn btn-primary mt-5 mx-auto d-block" onClick={this.toggleMove}>{text}</button>
         <Field className="mx-auto my-5" field={this.state.field} />
       </div>
     );
