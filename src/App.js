@@ -13,7 +13,8 @@ class App extends Component {
       figure: {
         points: []
       },
-      score: 0
+      score: 0,
+      toggleMove: true
     };
   }
 
@@ -128,9 +129,11 @@ class App extends Component {
 
   render() {
     const { score, field } = this.state;
+    const text = this.state.toggleMove ? 'Pause' : 'Start'
     return (
       <div className="App">
         <ScoreBoard score={score} />
+        <button type="button" className="btn btn-primary mt-5 mx-auto d-block" onClick={this.toggleMove}>{text}</button>
         <Field className="mx-auto my-5" field={field} />
       </div>
     );
