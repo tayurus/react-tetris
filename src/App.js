@@ -2,8 +2,8 @@ import React, { Component } from "react";
 import "./App.css";
 import _ from "lodash";
 import { generateNewField, drawFigure, rotateFigure, moveFigure, moveCell, generateFigureType } from "./helpers";
-import { FIELD_HEIGHT, FIELD_WIDTH } from "./constants";
-import { Field } from "./components";
+import { FIELD_HEIGHT, FIELD_WIDTH, SPAWN_ROW, SPAWN_COL } from "./constants";
+import { Field, ScoreBoard } from "./components";
 
 class App extends Component {
   constructor(props) {
@@ -12,7 +12,8 @@ class App extends Component {
       field: [],
       figure: {
         points: []
-      }
+      },
+      score: 0
     };
   }
 
@@ -80,7 +81,12 @@ class App extends Component {
   }
 
   drawNewFigure() {
-    this.setState({ figure: drawFigure(generateFigureType(), 0, 4) });
+    const newFigure = drawFigure(generateFigureType(), SPAWN_ROW, SPAWN_COL);
+    if (this.state.field[SPAWN_ROW + newFigure.height][SPAWN_COL + newFigure.width] !== 0) {
+      alert("GAME OVER");
+    } else {
+      this.setState({ figure: newFigure });
+    }
   }
 
   removeFullRows() {
@@ -107,13 +113,15 @@ class App extends Component {
       }
     }
 
-    this.setState({ field: newField });
+    this.setState({ field: newField, score: this.state.score + rowRemovedCount * newField[0].length * 100 });
   }
 
   render() {
+    const { score, field } = this.state;
     return (
       <div className="App">
-        <Field className="mx-auto my-5" field={this.state.field} />
+        <ScoreBoard score={score} />
+        <Field className="mx-auto my-5" field={field} />
       </div>
     );
   }
