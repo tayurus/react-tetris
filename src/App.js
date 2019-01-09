@@ -14,7 +14,8 @@ class App extends Component {
         points: []
       },
       score: 0,
-      toggleMove: true
+      toggleMove: true,
+      timeInterval: 1000
     };
   }
 
@@ -67,8 +68,14 @@ class App extends Component {
   }
 
   startInterval = () => {
-      this.moveInterval = setInterval(() => this.tetrisMove("down"), 1000)
+      this.moveInterval = setInterval(() => this.tetrisMove("down"), this.state.timeInterval)
   }
+
+  // componentWillUpdate(nextProps, nextState) {
+  //     if(nextState.score !== this.state.score) {
+  //       this.setState({ timeInterval: this.state.timeInterval-100 }, console.log(this.state.timeInterval))
+  //   }
+  // }
 
   toggleMove = () => {
       this.setState((state) => ({
@@ -124,7 +131,11 @@ class App extends Component {
       }
     }
 
-    this.setState({ field: newField, score: this.state.score + rowRemovedCount * newField[0].length * 100 });
+    this.setState({
+        field: newField,
+        score: this.state.score + rowRemovedCount * newField[0].length * 100,
+        timeInterval: this.state.timeInterval-100 
+    });
   }
 
   render() {
