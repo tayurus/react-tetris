@@ -68,19 +68,18 @@ class App extends Component {
   }
 
   startInterval = () => {
-      this.moveInterval = setInterval(() => this.tetrisMove("down"), this.state.timeInterval)
+      clearInterval(this.timeInterval)
+      this.timeInterval = setInterval(() => this.tetrisMove("down"), this.state.timeInterval)
   }
 
-  // componentWillUpdate(nextProps, nextState) {
-  //     if(nextState.score !== this.state.score) {
-  //       this.setState({ timeInterval: this.state.timeInterval-100 }, console.log(this.state.timeInterval))
-  //   }
-  // }
+  clearInterval = () => {
+      clearInterval(this.timeInterval)
+  }
 
   toggleMove = () => {
       this.setState((state) => ({
         toggleMove: !state.toggleMove
-    }), () => this.state.toggleMove ? this.startInterval() : clearInterval(this.moveInterval))
+    }), () => this.state.toggleMove ? this.startInterval() : this.clearInterval())
   }
 
   updateFigureOnField() {
@@ -133,9 +132,15 @@ class App extends Component {
 
     this.setState({
         field: newField,
-        score: this.state.score + rowRemovedCount * newField[0].length * 100,
-        timeInterval: this.state.timeInterval-100 
+        score: this.state.score + rowRemovedCount * newField[0].length * 100
     });
+  }
+
+  componentDidUpdate(prevProps, prevState){
+      if(this.state.score !== prevState.score && this.state.timeInterval > 0) {
+          this.setState({ timeInterval: this.state.timeInterval-100 }, () => this.startInterval())
+      }
+
   }
 
   render() {
