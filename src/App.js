@@ -15,7 +15,8 @@ class App extends Component {
       },
       score: 0,
       toggleMove: true,
-      timeInterval: 1000
+      timeInterval: 1000,
+      figureColor: 'tomato'
     };
   }
 
@@ -61,7 +62,7 @@ class App extends Component {
       this.removeFullRows();
       this.drawNewFigure();
     } else {
-      this.setState({ figure: moveFigure(this.state.field, this.state.figure, direction) }, () =>
+      this.setState({ figure: moveFigure(this.state.field, this.state.figure, direction), figureColor: newFigure.color}, () =>
         this.updateFigureOnField()
       );
     }
@@ -144,13 +145,13 @@ class App extends Component {
   }
 
   render() {
-    const { score, field } = this.state;
+    const { score, field, figureColor } = this.state;
     const text = this.state.toggleMove ? 'Pause' : 'Start'
     return (
       <div className="App">
         <ScoreBoard score={score} />
         <button type="button" className="btn btn-primary mt-5 mx-auto d-block" onClick={this.toggleMove}>{text}</button>
-        <Field className="mx-auto my-5" field={field} />
+        <Field className="mx-auto my-5" field={field} color={figureColor} />
       </div>
     );
   }
