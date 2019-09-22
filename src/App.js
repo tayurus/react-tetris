@@ -13,7 +13,10 @@ class App extends Component {
       figure: {
         points: []
       },
-      score: 0
+      score: 0,
+      toggleMove: true,
+      timeInterval: 1000,
+      figureColor: 'tomato'
     };
   }
 
@@ -24,7 +27,7 @@ class App extends Component {
       },
       () => {
         this.drawNewFigure();
-        setInterval(() => this.tetrisMove("down"), 1000);
+        this.startInterval()
       }
     );
 
@@ -59,10 +62,25 @@ class App extends Component {
       this.removeFullRows();
       this.drawNewFigure();
     } else {
-      this.setState({ figure: moveFigure(this.state.field, this.state.figure, direction) }, () =>
+      this.setState({ figure: moveFigure(this.state.field, this.state.figure, direction), figureColor: newFigure.color}, () =>
         this.updateFigureOnField()
       );
     }
+  }
+
+  startInterval = () => {
+      clearInterval(this.timeInterval)
+      this.timeInterval = setInterval(() => this.tetrisMove("down"), this.state.timeInterval)
+  }
+
+  clearInterval = () => {
+      clearInterval(this.timeInterval)
+  }
+
+  toggleMove = () => {
+      this.setState((state) => ({
+        toggleMove: !state.toggleMove
+    }), () => this.state.toggleMove ? this.startInterval() : this.clearInterval())
   }
 
   updateFigureOnField() {
@@ -113,15 +131,27 @@ class App extends Component {
       }
     }
 
-    this.setState({ field: newField, score: this.state.score + rowRemovedCount * newField[0].length * 100 });
+    this.setState({
+        field: newField,
+        score: this.state.score + rowRemovedCount * newField[0].length * 100
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState){
+      if(this.state.score !== prevState.score && this.state.timeInterval > 0) {
+          this.setState({ timeInterval: this.state.timeInterval-100 }, () => this.startInterval())
+      }
+
   }
 
   render() {
-    const { score, field } = this.state;
+    const { score, field, figureColor } = this.state;
+    const text = this.state.toggleMove ? 'Pause' : 'Start'
     return (
       <div className="App">
         <ScoreBoard score={score} />
-        <Field className="mx-auto my-5" field={field} />
+        <button type="button" className="btn btn-primary mt-5 mx-auto d-block" onClick={this.toggleMove}>{text}</button>
+        <Field className="mx-auto my-5" field={field} color={figureColor} />
       </div>
     );
   }

@@ -6,7 +6,8 @@ export const drawFigure = (figureName = "line", row = 0, col = 0) => {
         points: [[row, col], [row + 1, col], [row + 2, col], [row + 3, col]],
         rotate: 0,
         width: 1,
-        height: 4
+        height: 4,
+        color: 'red'
       };
     case "zipper":
       return {
@@ -14,7 +15,8 @@ export const drawFigure = (figureName = "line", row = 0, col = 0) => {
         points: [[row, col], [row + 1, col], [row + 1, col - 1], [row + 2, col - 1]],
         rotate: 0,
         width: 2,
-        height: 3
+        height: 3,
+        color: 'blue'
       };
     case "cube":
       return {
@@ -22,7 +24,8 @@ export const drawFigure = (figureName = "line", row = 0, col = 0) => {
         points: [[row, col], [row, col + 1], [row + 1, col], [row + 1, col + 1]],
         rotate: 0,
         width: 2,
-        height: 2
+        height: 2,
+        color: 'green'
       };
     case "hook":
       return {
@@ -30,7 +33,8 @@ export const drawFigure = (figureName = "line", row = 0, col = 0) => {
         points: [[row, col], [row + 1, col], [row + 2, col], [row + 2, col - 1]],
         rotate: 0,
         width: 2,
-        height: 3
+        height: 3,
+        color: '#ffc107'
       };
   }
 };
